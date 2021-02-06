@@ -18,7 +18,7 @@ PCA Plot = 1KG_PCA_plot.pdf
 
 1. Download the files as VCF.gz (and tab-indices)
 
-```
+```bash
 prefix="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr" ;
 suffix=".phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz" ;
 for chr in {1..22}; do
@@ -28,13 +28,13 @@ done
 
 2. Download 1000 Genomes PED file
 
-```
+```bash
 wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/working/20130606_sample_info/20130606_g1k.ped ;
 ```
 
 3. Download the GRCh37 / hg19 reference genome
 
-```
+```bash
 wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/human_g1k_v37.fasta.gz ;
 wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/human_g1k_v37.fasta.fai ;
 gunzip -c human_g1k_v37.fasta.gz > human_g1k_v37.fasta ; # (I slightly modified Blighe's command here)
@@ -42,7 +42,7 @@ gunzip -c human_g1k_v37.fasta.gz > human_g1k_v37.fasta ; # (I slightly modified 
 
 4. Convert the 1000 Genomes files to BCF
 
-```
+```bash
 for chr in {1..22}; do
     bcftools norm -m-any --check-ref w -f human_g1k_v37.fasta \
     ALL.chr"${chr}".phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz | \
@@ -56,7 +56,7 @@ done
 
 5. Convert the BCF files to PLINK format
 
-```
+```bash
 for chr in {1..22}; do
     plink --noweb --bcf ALL.chr"${chr}".phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.bcf \
     --keep-allele-order --vcf-idspace-to _ --const-fid --allow-extra-chr 0 --split-x b37 no-fail --make-bed \
@@ -70,7 +70,7 @@ Not performed because Blighe suggest it's not applicable.
 
 7. Prune variants from each chromosome
 
-```
+```bash
 mkdir Pruned ;
 
 for chr in {1..22}; do
@@ -86,7 +86,7 @@ done
 
 8. Get a list of all PLINK files
 
-```
+```bash
 find . -name "*.bim" | grep -e "Pruned" > ForMerge.list ;
 
 sed -i 's/.bim//g' ForMerge.list ;
@@ -94,19 +94,19 @@ sed -i 's/.bim//g' ForMerge.list ;
 
 9. Merge all projects into a single PLINK file
 
-```
+```bash
 plink --merge-list ForMerge.list --out Merge ;
 ```
 
 10. Perform PCA
 
-```
+```bash
 plink --bfile Merge --pca
 ```
 
 11. Generate plots in R
 
-```
+```r
 R
 
 options(scipen=100, digits=3)
