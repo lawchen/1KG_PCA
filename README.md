@@ -1,6 +1,7 @@
 # README for 1000 Genomes Phase III Project Data
 
 Documented by Lawrence Chen
+
 Start Date: June 16, 2019
 
 The data collected and commands here follow [Kevin Blighe's tutorial on producing a PCA plot for 1000 Genomes (1KG) Phase III](https://www.biostars.org/p/335605/)
